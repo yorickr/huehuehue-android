@@ -15,10 +15,9 @@ public class MainActivity extends AppCompatActivity {
 
     ListView lv;
 
-    //    ArrayList<Light> lights;
-    ArrayList<String> lights;
-    ArrayAdapter<String> itemsAdapter;
-    LightListAdapter adapter;
+        ArrayList<Light> lights;
+//    ArrayList<String> lights;
+    LightListAdapter itemsAdapter;
 
     APIHandler api;
 
@@ -26,12 +25,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        api = new APIHandler(this, "192.168.1.191", 8000);
+        api = new APIHandler(this, "145.102.68.223", 8000);
 
         lights = new ArrayList<>();
 
         lv = (ListView) findViewById(R.id.lightlistView);
-        itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lights);
+        itemsAdapter = new LightListAdapter(this, R.layout.item_light, lights);
 
         lv.setAdapter(itemsAdapter);
 

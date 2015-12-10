@@ -52,9 +52,9 @@ public class APIHandler {
                     parent.itemsAdapter.clear();
                     while (it.hasNext()) {
                         String next = it.next();
-
+                        JSONObject lamp = o.getJSONObject(next);
                         System.out.println(next);
-                        parent.itemsAdapter.add(next);
+                        parent.itemsAdapter.add(new Light(lamp.getString("name"), lamp.getString("type"), Integer.parseInt(next)));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
