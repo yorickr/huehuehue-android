@@ -25,7 +25,7 @@ public class Light
     public Light(LightBuilder builder)
     {
         this.name = builder.name;
-        this.type = builder.name;
+        this.type = builder.type;
         this.id = builder.id;
         this.brightness = builder.brightness;
         this.hue = builder.hue;

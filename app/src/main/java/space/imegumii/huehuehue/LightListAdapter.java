@@ -35,6 +35,7 @@ public class LightListAdapter extends ArrayAdapter<Light>
         }
 
         TextView lampName = (TextView) convertView.findViewById(R.id.lightname);
+        TextView lampType = (TextView) convertView.findViewById(R.id.lighttype);
         Switch onOffSwitch = (Switch) convertView.findViewById(R.id.switch1);
         SeekBar redSlider = (SeekBar) convertView.findViewById(R.id.red);
         SeekBar greenSlider = (SeekBar) convertView.findViewById(R.id.green);
@@ -113,6 +114,7 @@ public class LightListAdapter extends ArrayAdapter<Light>
         blueSlider.setOnSeekBarChangeListener(changeListener);
 
         lampName.setText(l.getName());
+        lampType.setText(l.getType());
         onOffSwitch.setChecked(l.isOn());
         Drawable background = circle.getBackground();
         ((GradientDrawable) background).setColor(Color.argb(255, r, g, b));

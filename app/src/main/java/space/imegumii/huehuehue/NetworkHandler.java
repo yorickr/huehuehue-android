@@ -2,13 +2,9 @@ package space.imegumii.huehuehue;
 
 import android.os.AsyncTask;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -19,18 +15,10 @@ import java.net.URL;
 /**
  * Created by imegumii on 9-12-15.
  */
-public class NetworkHandler extends AsyncTask<String, Integer, String>{
-
-    public enum Requests{
-        Post,Get,Put
-    }
-
-    public interface TaskListener {
-        public void onFinished(String result);
-    }
+public class NetworkHandler extends AsyncTask<String, Integer, String>
+{
 
     private TaskListener taskListener;
-
     private Requests request;
     private String json;
 
@@ -43,7 +31,7 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
 
     public NetworkHandler setJson(String s)
     {
-        this.json =s;
+        this.json = s;
         return this;
     }
 
@@ -51,18 +39,20 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
     {
         HttpURLConnection urlConnection = null;
         String json = "";
-        try {
+        try
+        {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Content-type", "application/json");
             urlConnection.setRequestProperty("Accept", "application/json");
             urlConnection.setRequestMethod("GET");
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(),"UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
 
             String line = null;
             StringBuilder sb = new StringBuilder();
 
-            while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null)
+            {
                 sb.append(line);
             }
 
@@ -70,12 +60,21 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
             json = sb.toString();
 
 
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e)
+        {
             e.printStackTrace();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
-        } finally{
-            if ( urlConnection!=null) urlConnection.disconnect();
+        }
+        finally
+        {
+            if (urlConnection != null)
+            {
+                urlConnection.disconnect();
+            }
         }
         return json;
     }
@@ -84,7 +83,8 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
     {
         HttpURLConnection urlConnection = null;
         String json = "";
-        try {
+        try
+        {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoOutput(true);
             urlConnection.setRequestProperty("Content-type", "application/json");
@@ -97,12 +97,13 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
             writer.close();
             os.close();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(),"UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
 
             String line = null;
             StringBuilder sb = new StringBuilder();
 
-            while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null)
+            {
                 sb.append(line);
             }
 
@@ -110,12 +111,21 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
             json = sb.toString();
 
 
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e)
+        {
             e.printStackTrace();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
-        } finally{
-            if ( urlConnection!=null) urlConnection.disconnect();
+        }
+        finally
+        {
+            if (urlConnection != null)
+            {
+                urlConnection.disconnect();
+            }
         }
         return json;
     }
@@ -124,7 +134,8 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
     {
         HttpURLConnection urlConnection = null;
         String json = "";
-        try {
+        try
+        {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoOutput(true);
             urlConnection.setRequestProperty("Content-type", "application/json");
@@ -138,12 +149,13 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
             writer.close();
             os.close();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(),"UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
 
             String line = null;
             StringBuilder sb = new StringBuilder();
 
-            while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null)
+            {
                 sb.append(line);
             }
 
@@ -151,12 +163,21 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
             json = sb.toString();
 
 
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e)
+        {
             e.printStackTrace();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
-        } finally{
-            if ( urlConnection!=null) urlConnection.disconnect();
+        }
+        finally
+        {
+            if (urlConnection != null)
+            {
+                urlConnection.disconnect();
+            }
         }
         return json;
     }
@@ -164,14 +185,20 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
     protected void onPostExecute(String result)
     {
         System.out.println(result);
-        if (taskListener != null) this.taskListener.onFinished(result);
+        if (taskListener != null)
+        {
+            this.taskListener.onFinished(result);
+        }
     }
 
     @Override
-    protected String doInBackground(String... params) {
-        try {
+    protected String doInBackground(String... params)
+    {
+        try
+        {
             URL url = new URL(params[0]);
-            switch (this.request) {
+            switch (this.request)
+            {
                 case Get:
                     return Get(url);
                 case Post:
@@ -179,10 +206,22 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
                 case Put:
                     return Put(url);
             }
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e)
+        {
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    public enum Requests
+    {
+        Post, Get, Put
+    }
+
+    public interface TaskListener
+    {
+        public void onFinished(String result);
     }
 }

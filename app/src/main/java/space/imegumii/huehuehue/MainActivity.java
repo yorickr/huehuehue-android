@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +54,7 @@ public class MainActivity extends AppCompatActivity
 
         ToggleButton tb = (ToggleButton) findViewById(R.id.togglebutton);
         final ToggleButton tempTb = tb;
+        final ArrayList<Light> tempLights = lights;
         tb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
             @Override
@@ -67,12 +67,20 @@ public class MainActivity extends AppCompatActivity
                     {
                         while (tempTb.isChecked())
                         {
-                            for (Light light : lights)
+                            for (Light light : tempLights)
                             {
-                                light.setHue(Math.random() * 65535);
+                                light.setHue(Math.random() * 65534);
                                 light.setBrightness(Math.random() * 254);
-                                light.setSaturation(Math.random() * 254);
-                                api.setLightValues(light);
+                                light.setSaturation(254);
+                                MainActivity.api.setInstantLightValues(light);
+                                try
+                                {
+                                    Thread.sleep(10);
+                                }
+                                catch (InterruptedException e)
+                                {
+                                    e.printStackTrace();
+                                }
                                 new Handler(Looper.getMainLooper()).post(new Runnable()
                                 {
                                     @Override
@@ -81,15 +89,14 @@ public class MainActivity extends AppCompatActivity
                                         itemsAdapter.notifyDataSetChanged();
                                     }
                                 });
-                                try
-                                {
-                                    Thread.sleep(100);
-                                }
-                                catch (InterruptedException e)
-                                {
-                                    e.printStackTrace();
-                                }
-
+                            }
+                            try
+                            {
+                                Thread.sleep(500);
+                            }
+                            catch (InterruptedException e)
+                            {
+                                e.printStackTrace();
                             }
                         }
                     }

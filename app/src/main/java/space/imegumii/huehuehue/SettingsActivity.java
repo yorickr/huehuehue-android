@@ -17,7 +17,7 @@ public class SettingsActivity extends AppCompatActivity
         setContentView(R.layout.activity_settings);
         EditText hostname = (EditText) findViewById(R.id.hostname);
         EditText port = (EditText) findViewById(R.id.port);
-        hostname.setText(MainActivity.settings.getString("hostname", ""));
+        hostname.setText(MainActivity.settings.getString("hostname", "hue.imegumii.space"));
         port.setText(String.valueOf(MainActivity.settings.getInt("port", 80)));
 
     }

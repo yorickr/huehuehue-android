@@ -57,7 +57,17 @@ public class APIHandler
 
     public void toggleLight(Light light)
     {
-        new NetworkHandler(NetworkHandler.Requests.Put, null).setJson("{\"on\":\"" + light.isOn + "\"}").execute("http://" + hostname + ":" + port + "/api/" + apikey + "/lights/" + light.id + "/state/");
+        JSONObject o = new JSONObject();
+        try
+        {
+            o.put("on", light.isOn);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        new NetworkHandler(NetworkHandler.Requests.Put, null).setJson(o.toString()).execute("http://" + hostname + ":" + port + "/api/" + apikey + "/lights/" + light.id + "/state/");
     }
 
     public void setLightValues(Light light)
@@ -65,9 +75,26 @@ public class APIHandler
         JSONObject o = new JSONObject();
         try
         {
-            o.put("bri", light.getBrightness());
-            o.put("sat", light.getSaturation());
-            o.put("hue", light.getHue());
+            o.put("bri", Math.floor(light.getBrightness()));
+            o.put("sat", Math.floor(light.getSaturation()));
+            o.put("hue", Math.floor(light.getHue()));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        new NetworkHandler(NetworkHandler.Requests.Put, null).setJson(o.toString()).execute("http://" + hostname + ":" + port + "/api/" + apikey + "/lights/" + light.id + "/state/");
+    }
+
+    public void setInstantLightValues(Light light)
+    {
+        JSONObject o = new JSONObject();
+        try
+        {
+            o.put("bri", Math.floor(light.getBrightness()));
+            o.put("sat", Math.floor(light.getSaturation()));
+            o.put("hue", Math.floor(light.getHue()));
+            o.put("transitiontime", 0);
         }
         catch (JSONException e)
         {
