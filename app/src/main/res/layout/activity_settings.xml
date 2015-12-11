@@ -49,12 +49,30 @@
             android:hint="80"
             />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/apikeyfield"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:editable="false"
+        android:hint="No key available."
+        android:textSize="15dp"
+        android:layout_margin="10dp"
+
+        />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
         android:onClick="savebutton_clicked"
         android:layout_margin="10dp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="register_clicked"
+        android:text="Register"
+        android:layout_margin="10dp"
+        />
 
 
 </LinearLayout>

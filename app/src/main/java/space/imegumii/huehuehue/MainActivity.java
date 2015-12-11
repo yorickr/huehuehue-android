@@ -21,6 +21,9 @@ public class MainActivity extends AppCompatActivity
     public static final String PREFS_NAME = "HuehuehuePreferences";
     public static SharedPreferences settings;
     public static APIHandler api;
+
+    public static final int RETURN_VALUE_SETTINGS = 1;
+
     ListView lv;
     ArrayList<Light> lights;
     //    ArrayList<String> lights;
@@ -118,27 +121,43 @@ public class MainActivity extends AppCompatActivity
 
     public void createNewAPI()
     {
+        System.out.println(settings.getString("hostname", "hue.imegumii.space") + " " + settings.getInt("port", 80));
         api = new APIHandler(this, settings.getString("hostname", "hue.imegumii.space"), settings.getInt("port", 80));
+    }
+
+    public void weather_clicked(View v)
+    {
+        api.getCurrentWeather();
     }
 
     public void disco_clicked(View v)
     {
-
+        ToggleButton discoToggle = (ToggleButton) findViewById(R.id.togglebutton);
+        if (discoToggle.isChecked())
+        {
+            discoToggle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_circle_outline_black_24dp, 0,0,0);
+            return;
+        }
+        discoToggle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_circle_filled_black_24dp, 0,0,0);
     }
 
-
-    public void register_clicked(View v)
-    {
-
-        //        api.getAllLights();
-        api.registerName();
-    }
 
     public void refresh_clicked(View v)
     {
 
         api.getAllLights();
         //            api.registerName();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        switch (requestCode)
+        {
+            case RETURN_VALUE_SETTINGS:
+                createNewAPI();
+                break;
+        }
     }
 
     @Override
@@ -152,8 +171,7 @@ public class MainActivity extends AppCompatActivity
         {
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                createNewAPI();
+                startActivityForResult(intent, RETURN_VALUE_SETTINGS);
         }
 
         return super.onOptionsItemSelected(item);

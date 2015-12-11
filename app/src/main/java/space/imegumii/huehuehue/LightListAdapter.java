@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -20,9 +21,17 @@ import java.util.List;
 public class LightListAdapter extends ArrayAdapter<Light>
 {
 
+    private List<Light> lights;
+
     public LightListAdapter(Context context, int resource, List<Light> objects)
     {
         super(context, resource, objects);
+        this.lights = objects;
+    }
+
+    public List<Light> getLights()
+    {
+        return lights;
     }
 
     @Override
@@ -41,6 +50,8 @@ public class LightListAdapter extends ArrayAdapter<Light>
         SeekBar greenSlider = (SeekBar) convertView.findViewById(R.id.green);
         SeekBar blueSlider = (SeekBar) convertView.findViewById(R.id.blue);
         View circle = (View) convertView.findViewById(R.id.circle);
+
+
         float[] hsv = new float[3];
         hsv[0] = (float) l.getHue()/182;
         hsv[1] = (float) l.getSaturation()/254;
@@ -94,9 +105,6 @@ public class LightListAdapter extends ArrayAdapter<Light>
                 int g = greenSlider.getProgress();
                 int b = blueSlider.getProgress();
                 Color.RGBToHSV(r, g, b, hsv);
-                //                Color.RGBToHSV(255,255,0,hsv);
-
-                System.out.println("HSV: " + hsv[0] + " " + hsv[1] + " " + hsv[2]);
 
                 tempLight.setHue(hsv[0] * 182);
                 tempLight.setSaturation(hsv[1] * 254);

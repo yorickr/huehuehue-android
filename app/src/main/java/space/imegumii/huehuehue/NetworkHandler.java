@@ -17,7 +17,10 @@ import java.net.URL;
  */
 public class NetworkHandler extends AsyncTask<String, Integer, String>
 {
-
+    public enum Requests
+    {
+        Post, Get, Put
+    }
     private TaskListener taskListener;
     private Requests request;
     private String json;
@@ -215,13 +218,5 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>
         return null;
     }
 
-    public enum Requests
-    {
-        Post, Get, Put
-    }
 
-    public interface TaskListener
-    {
-        public void onFinished(String result);
-    }
 }

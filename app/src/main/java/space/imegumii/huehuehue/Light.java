@@ -1,5 +1,7 @@
 package space.imegumii.huehuehue;
 
+import android.graphics.Color;
+
 /**
  * Created by imegumii on 9-12-15.
  */
@@ -37,6 +39,17 @@ public class Light
     {
         this.isOn = !isOn;
         MainActivity.api.toggleLight(this);
+    }
+
+    public void setColorUsingRGB(int r, int g, int b)
+    {
+        float[] hsv = new float[3];
+        Color.RGBToHSV(r, g, b, hsv);
+
+        this.setHue(hsv[0] * 182);
+        this.setSaturation(hsv[1] * 254);
+        this.setBrightness(hsv[2] * 254);
+        MainActivity.api.setLightValues(this);
     }
 
     public boolean isOn()

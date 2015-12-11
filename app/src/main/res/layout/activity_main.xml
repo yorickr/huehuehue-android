@@ -37,23 +37,29 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="register_clicked"
-                android:text="Register" />
 
-            <Button
+
+            <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:onClick="refresh_clicked"
-                android:text="Refresh" />
+                android:src="@drawable/ic_sync_black_24dp"
+                android:contentDescription="Refresh"
+                />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="weather_clicked"
+                android:src="@drawable/ic_wb_cloudy_black_24dp"
+                android:contentDescription="Set lamps according to weather"
+                />
             <ToggleButton
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Disco"
+                android:layout_height="match_parent"
                 android:onClick="disco_clicked"
                 android:id="@+id/togglebutton"
+                android:drawableStart="@drawable/ic_play_circle_filled_black_24dp"
+
                 />
         </LinearLayout>
 
