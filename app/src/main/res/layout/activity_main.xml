@@ -4,16 +4,25 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="space.imegumii.huehuehue.MainActivity">
+
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/my_toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--android:background="?attr/colorPrimary"-->
+        <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
+        <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
 
     <ListView
 
         android:id="@+id/lightlistView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:padding="5dp"/>
 
     <HorizontalScrollView
         android:layout_width="wrap_content"
@@ -39,6 +48,13 @@
                 android:layout_height="wrap_content"
                 android:onClick="refresh_clicked"
                 android:text="Refresh" />
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Disco"
+                android:onClick="disco_clicked"
+                android:id="@+id/togglebutton"
+                />
         </LinearLayout>
 
     </HorizontalScrollView>

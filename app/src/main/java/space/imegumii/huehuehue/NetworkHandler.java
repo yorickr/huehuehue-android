@@ -41,7 +41,7 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>{
 
     }
 
-    public NetworkHandler SetJson(String s)
+    public NetworkHandler setJson(String s)
     {
         this.json =s;
         return this;

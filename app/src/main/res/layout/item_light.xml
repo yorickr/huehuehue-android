@@ -1,20 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <TextView
+        android:id="@+id/lightname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Light name"
-        android:id="@+id/lightname"/>
-    <Switch
+        android:layout_margin="10dp"
+        android:text="Light name" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="On/Off"
-        android:id="@+id/switch1"
-        />
+        android:orientation="horizontal">
+
+        <View android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/circle"
+            android:id="@+id/circle"
+            android:layout_marginLeft="10dp"
+            />
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="On / Off  " />
+
+        <SeekBar
+            android:id="@+id/red"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:minWidth="100dp"
+            android:maxWidth="200dp"
+            android:max="255"/>
+
+        <SeekBar
+            android:id="@+id/green"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:minWidth="100dp"
+            android:maxWidth="200dp"
+            android:max="255"/>
+        <SeekBar
+            android:id="@+id/blue"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:minWidth="100dp"
+            android:maxWidth="200dp"
+            android:max="255"/>
+    </LinearLayout>
+
 
 </LinearLayout>

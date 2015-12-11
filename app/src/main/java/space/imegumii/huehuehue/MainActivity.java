@@ -1,31 +1,41 @@
 package space.imegumii.huehuehue;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity
+{
+    public static final String PREFS_NAME = "HuehuehuePreferences";
+    public static SharedPreferences settings;
+    public static APIHandler api;
     ListView lv;
-
-        ArrayList<Light> lights;
-//    ArrayList<String> lights;
+    ArrayList<Light> lights;
+    //    ArrayList<String> lights;
     LightListAdapter itemsAdapter;
 
-    APIHandler api;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        api = new APIHandler(this, "145.102.68.223", 8000);
+        //init settings before API
+        settings = getSharedPreferences(PREFS_NAME, 0);
+        api = new APIHandler(this, settings.getString("hostname", "hue.imegumii.space"), settings.getInt("port", 80));
+
 
         lights = new ArrayList<>();
 
@@ -34,60 +44,109 @@ public class MainActivity extends AppCompatActivity {
 
         lv.setAdapter(itemsAdapter);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
                 System.out.println("Clicked" + id);
             }
         });
 
+        ToggleButton tb = (ToggleButton) findViewById(R.id.togglebutton);
+        final ToggleButton tempTb = tb;
+        tb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked)
+            {
+                new Thread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        while (tempTb.isChecked())
+                        {
+                            for (Light light : lights)
+                            {
+                                light.setHue(Math.random() * 65535);
+                                light.setBrightness(Math.random() * 254);
+                                light.setSaturation(Math.random() * 254);
+                                api.setLightValues(light);
+                                new Handler(Looper.getMainLooper()).post(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        itemsAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                                try
+                                {
+                                    Thread.sleep(100);
+                                }
+                                catch (InterruptedException e)
+                                {
+                                    e.printStackTrace();
+                                }
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+                            }
+                        }
+                    }
+                }).start();
 
-//       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+            }
+        });
+
+        api.getAllLights();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    public void light_clicked(View v) {
+    public void createNewAPI()
+    {
+        api = new APIHandler(this, settings.getString("hostname", "hue.imegumii.space"), settings.getInt("port", 80));
+    }
+
+    public void disco_clicked(View v)
+    {
 
     }
 
-    public void register_clicked(View v) {
 
-//        api.getAllLights();
+    public void register_clicked(View v)
+    {
+
+        //        api.getAllLights();
         api.registerName();
     }
 
-    public void refresh_clicked(View v) {
+    public void refresh_clicked(View v)
+    {
 
         api.getAllLights();
-//            api.registerName();
+        //            api.registerName();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId())
+        {
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                createNewAPI();
         }
 
         return super.onOptionsItemSelected(item);
