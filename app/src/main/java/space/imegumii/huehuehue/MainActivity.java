@@ -1,5 +1,8 @@
 package space.imegumii.huehuehue;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.ToggleButton;
@@ -19,42 +21,21 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
 {
     public static final String PREFS_NAME = "HuehuehuePreferences";
+    public static final int RETURN_VALUE_SETTINGS = 1;
+    public static final int ALARM1 = 1;
     public static SharedPreferences settings;
     public static APIHandler api;
-
-    public static final int RETURN_VALUE_SETTINGS = 1;
 
     ListView lv;
     ArrayList<Light> lights;
     //    ArrayList<String> lights;
     LightListAdapter itemsAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+    private PendingIntent pendingIntent;
+    private AlarmManager alarmManager;
+
+    public void initializeHandlers()
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        //init settings before API
-        settings = getSharedPreferences(PREFS_NAME, 0);
-        api = new APIHandler(this, settings.getString("hostname", "hue.imegumii.space"), settings.getInt("port", 80));
-
-
-        lights = new ArrayList<>();
-
-        lv = (ListView) findViewById(R.id.lightlistView);
-        itemsAdapter = new LightListAdapter(this, R.layout.item_light, lights);
-
-        lv.setAdapter(itemsAdapter);
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                System.out.println("Clicked" + id);
-            }
-        });
-
         ToggleButton tb = (ToggleButton) findViewById(R.id.togglebutton);
         final ToggleButton tempTb = tb;
         final ArrayList<Light> tempLights = lights;
@@ -107,8 +88,60 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+    }
+
+    public void initializeFields()
+    {
+        //init settings before API
+        settings = getSharedPreferences(PREFS_NAME, 0);
+        api = new APIHandler(this, settings.getString("hostname", "hue.imegumii.space"), settings.getInt("port", 80));
+        lights = new ArrayList<>();
+
+        lv = (ListView) findViewById(R.id.lightlistView);
+        itemsAdapter = new LightListAdapter(this, R.layout.item_light, lights);
+
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getBaseContext(), OnAlarmReceive.class);
+        pendingIntent = PendingIntent.getBroadcast(this, ALARM1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public void initialLogic()
+    {
+        lv.setAdapter(itemsAdapter);
 
         api.getAllLights();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        initializeFields();
+        initializeHandlers();
+        initialLogic();
+
+    }
+
+
+    public void setWeatherRefreshTime(int minutes)
+    {
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, minutes * 1000 * 60, minutes * 1000 * 60, pendingIntent);
+    }
+
+    @Override
+    protected void onPause()
+    {
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        alarmManager.cancel(pendingIntent);
+        super.onStop();
     }
 
     @Override
@@ -125,8 +158,21 @@ public class MainActivity extends AppCompatActivity
         api = new APIHandler(this, settings.getString("hostname", "hue.imegumii.space"), settings.getInt("port", 80));
     }
 
+    public void timer_clicked(View v)
+    {
+        ToggleButton alarmToggle = (ToggleButton) findViewById(R.id.alarmbutton);
+        if (alarmToggle.isChecked())
+        {
+            setWeatherRefreshTime(settings.getInt("weathertime", 15));
+            return;
+        }
+        alarmManager.cancel(pendingIntent);
+
+    }
+
     public void weather_clicked(View v)
     {
+
         api.getCurrentWeather();
     }
 
@@ -135,10 +181,10 @@ public class MainActivity extends AppCompatActivity
         ToggleButton discoToggle = (ToggleButton) findViewById(R.id.togglebutton);
         if (discoToggle.isChecked())
         {
-            discoToggle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_circle_outline_black_24dp, 0,0,0);
+            discoToggle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_circle_outline_black_24dp, 0, 0, 0);
             return;
         }
-        discoToggle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_circle_filled_black_24dp, 0,0,0);
+        discoToggle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_circle_filled_black_24dp, 0, 0, 0);
     }
 
 
@@ -156,6 +202,12 @@ public class MainActivity extends AppCompatActivity
         {
             case RETURN_VALUE_SETTINGS:
                 createNewAPI();
+                ToggleButton alarmToggle = (ToggleButton) findViewById(R.id.alarmbutton);
+                if (alarmToggle.isChecked())
+                {
+                    setWeatherRefreshTime(settings.getInt("weathertime", 15));
+                }
+
                 break;
         }
     }

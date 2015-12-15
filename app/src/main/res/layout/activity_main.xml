@@ -36,9 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
-
-
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -56,11 +53,20 @@
             <ToggleButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:id="@+id/alarmbutton"
+                android:onClick="timer_clicked"
+                />
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:onClick="disco_clicked"
                 android:id="@+id/togglebutton"
                 android:drawableStart="@drawable/ic_play_circle_filled_black_24dp"
 
                 />
+
+
+
         </LinearLayout>
 
     </HorizontalScrollView>
