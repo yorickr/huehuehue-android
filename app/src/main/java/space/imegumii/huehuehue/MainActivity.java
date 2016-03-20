@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                System.out.println("Clicked" + id);
+                Log.d("Huehuehue-android", "Clicked" + id);
             }
         });
 
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity
 
     public void createNewAPI()
     {
-        System.out.println(settings.getString("hostname", "hue.imegumii.space") + " " + settings.getInt("port", 80));
+        Log.d("Huehuehue-android", settings.getString("hostname", "hue.imegumii.space") + " " + settings.getInt("port", 80));
         api = new APIHandler(this, settings.getString("hostname", "hue.imegumii.space"), settings.getInt("port", 80));
     }
 

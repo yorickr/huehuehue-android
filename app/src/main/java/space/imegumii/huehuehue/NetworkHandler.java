@@ -1,6 +1,7 @@
 package space.imegumii.huehuehue;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -187,7 +188,7 @@ public class NetworkHandler extends AsyncTask<String, Integer, String>
 
     protected void onPostExecute(String result)
     {
-        System.out.println(result);
+        Log.d("Huehuehue-android", result);
         if (taskListener != null)
         {
             this.taskListener.onFinished(result);

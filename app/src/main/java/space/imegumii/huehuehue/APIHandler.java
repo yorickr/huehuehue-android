@@ -3,6 +3,7 @@ package space.imegumii.huehuehue;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +30,8 @@ public class APIHandler
         {
             apikey = MainActivity.settings.getString("apikey", "");
         }
+
+
     }
 
     public void setLightsUsingWeatherID(int id)
@@ -37,7 +40,7 @@ public class APIHandler
         {
             //Thunderstorm
             case 2:
-                System.out.println("Thunder");
+                Log.d("Huehuehue-android", "Thunder");
                 for (Light l : parent.itemsAdapter.getLights())
                 {
                     l.setColorUsingRGB(255, 255, 0);
@@ -45,7 +48,7 @@ public class APIHandler
                 break;
             //Drizzle
             case 3:
-                System.out.println("Drizzle");
+                Log.d("Huehuehue-android", "Drizzle");
                 for (Light l : parent.itemsAdapter.getLights())
                 {
                     l.setColorUsingRGB(157, 255, 218);
@@ -53,7 +56,7 @@ public class APIHandler
                 break;
             //Rain
             case 5:
-                System.out.println("Rain");
+                Log.d("Huehuehue-android", "Rain");
                 for (Light l : parent.itemsAdapter.getLights())
                 {
                     l.setColorUsingRGB(107, 144, 255);
@@ -61,7 +64,7 @@ public class APIHandler
                 break;
             //Snow
             case 6:
-                System.out.println("Snow");
+                Log.d("Huehuehue-android", "Snow");
                 for (Light l : parent.itemsAdapter.getLights())
                 {
                     l.setColorUsingRGB(255, 255, 255);
@@ -71,14 +74,14 @@ public class APIHandler
             case 8:
                 if (id == 800)
                 {
-                    System.out.println("Clear sky");
+                    Log.d("Huehuehue-android", "Clear sky");
                     for (Light l : parent.itemsAdapter.getLights())
                     {
                         l.setColorUsingRGB(0, 0, 0);
                     }
                     break;
                 }
-                System.out.println("Clouds");
+                Log.d("Huehuehue-android", "Clouds");
                 for (Light l : parent.itemsAdapter.getLights())
                 {
                     l.setColorUsingRGB(97, 96, 97);
@@ -107,7 +110,7 @@ public class APIHandler
                     JSONObject o = new JSONObject(result);
                     JSONArray weather = o.getJSONArray("weather");
                     int weatherId = weather.getJSONObject((int) Math.floor(Math.random() * weather.length())).getInt("id");
-                    System.out.println(weatherId);
+                    Log.d("Huehuehue-android", "" + weatherId);
                     setLightsUsingWeatherID(weatherId);
 
                 }
@@ -135,7 +138,7 @@ public class APIHandler
                     SharedPreferences.Editor editor = MainActivity.settings.edit();
                     editor.putString("apikey", apikey);
                     editor.commit();
-                    System.out.println(apikey);
+                    Log.d("Huehuehue-android", apikey);
                     taskListener.onFinished("ok");
                 }
                 catch (Exception e)
@@ -163,7 +166,7 @@ public class APIHandler
                     SharedPreferences.Editor editor = MainActivity.settings.edit();
                     editor.putString("apikey", apikey);
                     editor.commit();
-                    System.out.println(apikey);
+                    Log.d("Huehuehue-android", apikey);
                 }
                 catch (Exception e)
                 {
@@ -240,7 +243,7 @@ public class APIHandler
                         String next = it.next();
                         JSONObject lamp = o.getJSONObject(next);
                         JSONObject state = lamp.getJSONObject("state");
-                        System.out.println(next);
+                        Log.d("Huehuehue-android", next);
                         LightBuilder lb = LightBuilder.GetLightBuilder(lamp.getString("name"), lamp.getString("type"), Integer.parseInt(next));
                         if (!state.isNull("hue"))
                         {
